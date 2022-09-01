@@ -1,9 +1,8 @@
 /env
 .idea
-<<<<<<< HEAD
-=======
 /idea
-
+*env
+.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
