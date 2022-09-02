@@ -1,19 +1,10 @@
 import os
-import sqlalchemy
-import databases
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from decouple import config
+from database import database
 
 API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
-DATABASE_URL = os.getenv("DATABASE_URL", config("DATABASE_URL"))
-metadata = sqlalchemy.MetaData()
-
-database = databases.Database(DATABASE_URL)
-engine = sqlalchemy.create_engine(
-    DATABASE_URL, pool_size=3, max_overflow=0
-)
-metadata.create_all(engine)
 
 app = FastAPI()
 app.add_middleware(
