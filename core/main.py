@@ -1,9 +1,11 @@
 import os
 import crud, models, schemas
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from decouple import config
-from database import database, SessionLocal, engine
+from database import database, SessionLocal
+from sqlalchemy.orm import Session
+from pydantic import UUID4
 
 API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
 
@@ -27,6 +29,7 @@ async def shutdown():
     await database.disconnect()
 
 
+# Dependency
 def get_db():
     db = SessionLocal()
     try:
@@ -43,5 +46,16 @@ async def root():
             "version": API_VERSION
             }
 
-@app.get("/daily-return/{entry_id}")
-async def daily_return_item(entry_id):
+
+@app.get("/api/v1/daily-return/{entry_id}")
+async def daily_return_item(
+        entry_id: UUID4,
+        db: Session = Depends(get_db)
+    ):
+    response = crud.get_latest_price(db, entry_id)
+    return response
+
+
+@app.post("/api/v1/daily-return/new")
+async def create_new_entry(db: Session = Depends(get_db)):
+    return True
