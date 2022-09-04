@@ -10,7 +10,7 @@ def get_latest_price(db: Session, portfolio_id: UUID4):
     :param portfolio_id: UUID4
     :return:
     """
-    fetched_entry = db.query(DailyReturn).filter(DailyReturn.portfolio_id == portfolio_id)
+    fetched_entry = db.query(DailyReturn).filter(DailyReturn.portfolio_id == portfolio_id).first()
     response = {"message": "success",
                 "status_code": None,
                 "data": {}
