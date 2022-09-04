@@ -3,7 +3,7 @@ import crud, models, schemas
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from decouple import config
-from database import database, SessionLocal
+from database import SessionLocal, database
 from sqlalchemy.orm import Session
 from pydantic import UUID4
 

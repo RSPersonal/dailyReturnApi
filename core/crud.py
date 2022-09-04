@@ -1,6 +1,4 @@
 import models
-from uuid import uuid4
-from datetime import date
 from sqlalchemy.orm import Session
 from schemas import DailyReturnEntry
 from pydantic import UUID4
@@ -13,13 +11,16 @@ def get_latest_price(db: Session, entry_id: UUID4):
     :return:
     """
     fetched_entry = db.query(models.DailyReturn).get(entry_id)
-    response = {"connection": "success",
-                "status_code": 200,
+    response = {"message": "success",
+                "status_code": None,
                 "data": {}
                 }
     if not fetched_entry:
-        response['data'] = {entry_id}
+        response['status_code'] = 404
+        response['error'] = 'No entry found with given ID'
+        response['id'] = entry_id
     else:
+        response['status_code'] = 200
         response['data'] = {
             fetched_entry
         }
