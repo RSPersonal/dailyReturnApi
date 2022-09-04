@@ -1,16 +1,16 @@
-import models
+from models import DailyReturn
 from sqlalchemy.orm import Session
 from schemas import DailyReturnEntry
 from pydantic import UUID4
 
 
-def get_latest_price(db: Session, entry_id: UUID4):
+def get_latest_price(db: Session, portfolio_id: UUID4):
     """
     :param db: Session
-    :param entry_id: UUID4
+    :param portfolio_id: UUID4
     :return:
     """
-    fetched_entry = db.query(models.DailyReturn).get(entry_id)
+    fetched_entry = db.query(DailyReturn).filter(DailyReturn.portfolio_id == portfolio_id).first()
     response = {"message": "success",
                 "status_code": None,
                 "data": {}
@@ -18,7 +18,7 @@ def get_latest_price(db: Session, entry_id: UUID4):
     if not fetched_entry:
         response['status_code'] = 404
         response['error'] = 'No entry found with given ID'
-        response['id'] = entry_id
+        response['requested_id'] = portfolio_id
     else:
         response['status_code'] = 200
         response['data'] = {

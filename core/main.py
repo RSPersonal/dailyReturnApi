@@ -12,7 +12,7 @@ API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
