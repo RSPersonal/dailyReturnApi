@@ -38,7 +38,7 @@ def get_db():
         db.close()
 
 
-@app.get("/api/v1/")
+@app.get("/")
 async def root():
     return {"message": "success",
             "status_code": 200,
