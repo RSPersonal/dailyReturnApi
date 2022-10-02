@@ -1,8 +1,18 @@
-version: "3.8"
+version: "3.3"
 
 services:
   backend:
     build: .
     restart: always
-    ports:
-      - "80:80"
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.app.loadbalance.server.port=80
+      - traefik.http.routers.app-http.entrypoints=http
+      - traefik.http.routers.app-http.rule=Host('167.71.4.12')
+      - traefik.docker.network=traefik.public
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    external: true
