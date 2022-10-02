@@ -9,10 +9,15 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
+      # Enable Docker in Traefik, so that it reads labels from Docker services
       - --providers.docker
+      # Do not expose all Docker services, only the ones explicitly exposed
       - --providers.docker.exposedbydefault=false
+      # Create an entrypoint "http" listening on port 80
       - --entrypoints.http.address=:80
+      # Enable the access log, with HTTP requests
       - --accesslog
+      # Enable the Traefik log, for configurations and errors
       - --log
     networks:
       - traefik-public

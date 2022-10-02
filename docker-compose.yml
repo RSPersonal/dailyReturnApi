@@ -5,11 +5,15 @@ services:
     build: .
     restart: always
     labels:
+      # Enable Traefik for this specific "backend" service
       - traefik.enable=true
-      - traefik.http.services.core.loadbalancer.server.port=80
+      # Define the port inside of the Docker service to use
+      - traefik.http.services.app.loadbalancer.server.port=80
+      # Make Traefik use this domain in HTTP
       - traefik.http.routers.app-http.entrypoints=http
-      - traefik.http.routers.app-http.rule=Host('167.71.4.12')
-      - traefik.docker.network=traefik.public
+      - traefik.http.routers.app-http.rule=Host(`167.71.4.12`)
+      # Use the traefik-public network (declared below)
+      - traefik.docker.network=traefik-public
     networks:
       - traefik-public
 
