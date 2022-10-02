@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM tiangolo/uvicorn-gunicorn:python3.8-slim
 
 WORKDIR /code
 COPY .env /code

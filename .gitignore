@@ -3,6 +3,7 @@
 /idea
 *env
 .env
+.env.prod
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,0 +1,1 @@
+docker build -t fastapiprod -f Dockerfile.prod .

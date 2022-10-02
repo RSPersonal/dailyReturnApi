@@ -2,13 +2,14 @@ from models import DailyReturn
 from sqlalchemy.orm import Session
 from schemas import DailyReturnEntry
 from pydantic import UUID4
+from typing import Dict
 
 
-def get_latest_price(db: Session, portfolio_id: UUID4):
+def get_latest_price(db: Session, portfolio_id: UUID4) -> Dict:
     """
     :param db: Session
     :param portfolio_id: UUID4
-    :return:
+    :return: Dictionary with fetched daily return or no entry found
     """
     fetched_entry = db.query(DailyReturn).filter(DailyReturn.portfolio_id == portfolio_id).first()
     response = {"message": "success",

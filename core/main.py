@@ -1,5 +1,5 @@
 import os
-import crud, models, schemas
+import crud
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from decouple import config
@@ -38,6 +38,13 @@ def get_db():
         db.close()
 
 
+@app.get("/")
+def read_main():
+    return {"message": "Daily Return API",
+            "Author": "Raphael Sparenberg",
+            "Version": 1.0}
+
+
 @app.get("/api/v1/")
 async def root():
     return {"message": "success",
@@ -51,7 +58,7 @@ async def root():
 async def daily_return_item(
         entry_id: UUID4,
         db: Session = Depends(get_db)
-    ):
+):
     response = crud.get_latest_price(db, entry_id)
     return response
 
