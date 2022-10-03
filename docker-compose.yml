@@ -17,8 +17,8 @@ services:
       - traefik.http.routers.app-https.rule=Host(`rs-portfolio-services.com`)
       - traefik.http.routers.app-https.tls=true
       # Use tls lets encrypt resolver
-      - traefik.http.routers.app.https.tls.certresolver=le
-      - traefik.http.middlewares.https-redirect.redirectscheme=https
+      - traefik.http.routers.app-https.tls.certresolver=le
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
       - traefik.http.routers.app-http.middlewares=https-redirect
       # Use the traefik-public network (declared below)

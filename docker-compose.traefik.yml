@@ -18,7 +18,7 @@ services:
       # Create an entrypoint "http" listening on port 80
       - --entrypoints.http.address=:80
       # Create an entrypoint "https" listening on port 443
-      - --entrypoints.http.address=:443
+      - --entrypoints.https.address=:443
       # Create the certificates' resolver for let's encrypt, uses the environment variable email
       - --certificatesresolvers.le.acme.email=${LETS_ENCRYPT_MAIL}
       # Store the generated certificates' in the mounted volume
@@ -33,6 +33,9 @@ services:
       - traefik-public
 
 volumes:
+  # Create a volume to store the certificates, there is a constraint to make sure
+  # Traefik is always deployed to the same Docker node with the same volume containing
+  # the HTTPS certificates
   traefik-public-certificates:
 
 networks:
