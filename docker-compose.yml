@@ -12,6 +12,15 @@ services:
       # Make Traefik use this domain in HTTP
       - traefik.http.routers.app-http.entrypoints=http
       - traefik.http.routers.app-http.rule=Host(`rs-portfolio-services.com`)
+      # Make Traefik use this domain in HTTPS
+      - traefik.http.routers.app-https.entrypoints=https
+      - traefik.http.routers.app-https.rule=Host(`rs-portfolio-services.com`)
+      - traefik.http.routers.app-https.tls=true
+      # Use tls lets encrypt resolver
+      - traefik.http.routers.app.https.tls.certresolver=le
+      - traefik.http.middlewares.https-redirect.redirectscheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+      - traefik.http.routers.app-http.middlewares=https-redirect
       # Use the traefik-public network (declared below)
       - traefik.docker.network=traefik-public
     networks:

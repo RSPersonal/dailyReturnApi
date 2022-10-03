@@ -40,18 +40,11 @@ def get_db():
 
 @app.get("/")
 def read_main():
-    return {"message": "Daily Return API",
-            "Author": "Raphael Sparenberg",
-            "Version": 1.0}
-
-
-@app.get("/api/v1/")
-async def root():
     return {"message": "success",
-            "status_code": 200,
-            "title": "API for getting daily return data",
-            "version": API_VERSION
-            }
+            "status": 200,
+            "Title": "Daily Return API",
+            "Author": "Raphael Sparenberg",
+            "Version": API_VERSION}
 
 
 @app.get("/api/v1/daily-return/{entry_id}")
@@ -59,6 +52,9 @@ async def daily_return_item(
         entry_id: UUID4,
         db: Session = Depends(get_db)
 ):
+    """
+    parameters:
+    """
     response = crud.get_latest_price(db, entry_id)
     return response
 

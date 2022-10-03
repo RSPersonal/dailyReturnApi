@@ -1,3 +1,4 @@
+from responses import empty_success_response
 from models import DailyReturn
 from sqlalchemy.orm import Session
 from schemas import DailyReturnEntry
@@ -12,10 +13,7 @@ def get_latest_price(db: Session, portfolio_id: UUID4) -> Dict:
     :return: Dictionary with fetched daily return or no entry found
     """
     fetched_entry = db.query(DailyReturn).filter(DailyReturn.portfolio_id == portfolio_id).first()
-    response = {"message": "success",
-                "status_code": None,
-                "data": {}
-                }
+    response = empty_success_response
     if not fetched_entry:
         response['status_code'] = 404
         response['error'] = 'No entry found with given ID'

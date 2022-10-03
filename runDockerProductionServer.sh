@@ -1,1 +1,1 @@
-docker run -it -p 5000:8000 fastapiprod
+docker-compose -f docker-compose.yml up -d
