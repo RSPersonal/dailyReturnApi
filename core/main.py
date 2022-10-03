@@ -1,11 +1,17 @@
 import os
+import uuid
+
 import crud
+from schemas import DailyReturnEntry
+from models import DailyReturn
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from decouple import config
 from database import SessionLocal, database
 from sqlalchemy.orm import Session
 from pydantic import UUID4
+from datetime import datetime
+from sqlalchemy.exc import IntegrityError
 
 API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
 
@@ -50,8 +56,7 @@ def read_main():
 @app.get("/api/v1/daily-return/{entry_id}")
 async def daily_return_item(
         entry_id: UUID4,
-        db: Session = Depends(get_db)
-):
+        db: Session = Depends(get_db)):
     """
     parameters:
     """
@@ -59,6 +64,11 @@ async def daily_return_item(
     return response
 
 
-@app.post("/api/v1/daily-return/new")
-async def create_new_entry(db: Session = Depends(get_db)):
-    return True
+@app.post("/api/v1/daily-return/new/{portfolio_id}/{amount}", response_model=DailyReturnEntry)
+async def create_new_entry(portfolio_id: UUID4,
+                           amount: float,
+                           db: Session = Depends(get_db)):
+
+    response = crud.create_latest_price_entry(db, portfolio_id, amount)
+    print(response)
+    return response

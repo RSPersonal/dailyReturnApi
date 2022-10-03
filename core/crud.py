@@ -1,9 +1,13 @@
-from responses import empty_success_response
+import uuid
+
+from responses import empty_success_response, not_found_response
 from models import DailyReturn
 from sqlalchemy.orm import Session
 from schemas import DailyReturnEntry
 from pydantic import UUID4
 from typing import Dict
+from datetime import datetime
+from sqlalchemy.exc import IntegrityError
 
 
 def get_latest_price(db: Session, portfolio_id: UUID4) -> Dict:
@@ -23,24 +27,32 @@ def get_latest_price(db: Session, portfolio_id: UUID4) -> Dict:
         response['data'] = {
             fetched_entry
         }
-    return response
+    return response  # pragma: nocover
 
 
-def create_latest_price_entry(user_entry: DailyReturnEntry, db: Session, amount: float, user_portfolio_id: str):
+def create_latest_price_entry(db: Session, portfolio_id: UUID4, amount: float) -> Dict:
     """
-    :param user_entry:
     :param db: Session
-    :param amount: Float
-    :param user_portfolio_id: UUID
+    :param portfolio_id: UUID4
+    :param amount: float
     :return: Response
     """
-    user_entry = DailyReturnEntry(
-        id=user_entry.id,
-        last_price=user_entry.last_price,
-        added_on=user_entry.added_on,
-        portfolio_id=user_portfolio_id
+
+    new_user_entry = DailyReturn(
+        last_price=amount,
+        added_on=datetime.now(),
+        portfolio_id=portfolio_id
     )
-    db.add(user_entry)
-    db.commit()
-    db.refresh(user_entry)
-    return user_entry
+    try:
+        db.add(new_user_entry)
+        db.commit()
+        db.refresh(new_user_entry)
+        response = empty_success_response
+        response['data'] = new_user_entry
+    except IntegrityError as e:
+        response = not_found_response
+        response['error'] = e
+        return response
+    return response  # pragma: nocover
+
+# def update_price_entry(db: Session, amount: float, user_portfolio_id: str) -> Dict:
