@@ -3,15 +3,13 @@ import uuid
 
 import crud
 from schemas import DailyReturnEntry
-from models import DailyReturn
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from decouple import config
 from database import SessionLocal, database
 from sqlalchemy.orm import Session
 from pydantic import UUID4
-from datetime import datetime
-from sqlalchemy.exc import IntegrityError
+from responses import empty_success_response
 
 API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
 
@@ -68,7 +66,18 @@ async def daily_return_item(
 async def create_new_entry(portfolio_id: UUID4,
                            amount: float,
                            db: Session = Depends(get_db)):
-
     response = crud.create_latest_price_entry(db, portfolio_id, amount)
-    print(response)
+    return response
+
+
+@app.delete("/api/v1/daily-return/delete/{portfolio_id}")
+async def delete_existing_entry(portfolio_id: UUID4,
+                                db: Session = Depends(get_db)):
+    active_deleting = os.getenv("DELETE_ACTIVE", config("DELETE_ACTIVE"))
+    if active_deleting:
+        response = crud.delete_entry(db, portfolio_id)
+    else:
+        response = empty_success_response
+        response['status_code'] = 200
+        response['data'] = 'Deleting of records is deactivated'
     return response
