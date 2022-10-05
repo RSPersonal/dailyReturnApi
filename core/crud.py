@@ -1,46 +1,83 @@
-import models
-from uuid import uuid4
-from datetime import date
+import uuid
+
+from responses import empty_success_response, not_found_response
+from models import DailyReturn
 from sqlalchemy.orm import Session
 from schemas import DailyReturnEntry
 from pydantic import UUID4
+from typing import Dict
+from datetime import datetime
+from sqlalchemy.exc import IntegrityError
 
 
-def get_latest_price(db: Session, entry_id: UUID4):
+def get_latest_price(db: Session, portfolio_id: UUID4) -> Dict:
     """
     :param db: Session
-    :param entry_id: UUID4
-    :return:
+    :param portfolio_id: UUID4
+    :return: Dictionary with fetched daily return or no entry found
     """
-    fetched_entry = db.query(models.DailyReturn).get(entry_id)
-    response = {"connection": "success",
-                "status_code": 200,
-                "data": {}
-                }
+    fetched_entry = db.query(DailyReturn).filter(DailyReturn.portfolio_id == portfolio_id).first()
+    response = empty_success_response
     if not fetched_entry:
-        response['data'] = {entry_id}
+        response['status_code'] = 404
+        response['error'] = 'No entry found with given ID'
+        response['requested_id'] = portfolio_id
     else:
+        response['status_code'] = 200
         response['data'] = {
             fetched_entry
         }
-    return response
+    return response  # pragma: nocover
 
 
-def create_latest_price_entry(user_entry: DailyReturnEntry, db: Session, amount: float, user_portfolio_id: str):
+def create_latest_price_entry(db: Session, portfolio_id: UUID4, amount: float) -> Dict:
     """
-    :param user_entry:
     :param db: Session
-    :param amount: Float
-    :param user_portfolio_id: UUID
+    :param portfolio_id: UUID4
+    :param amount: float
     :return: Response
     """
-    user_entry = DailyReturnEntry(
-        id=user_entry.id,
-        last_price=user_entry.last_price,
-        added_on=user_entry.added_on,
-        portfolio_id=user_portfolio_id
+
+    new_user_entry = DailyReturn(
+        last_price=amount,
+        added_on=datetime.now(),
+        portfolio_id=portfolio_id
     )
-    db.add(user_entry)
-    db.commit()
-    db.refresh(user_entry)
-    return user_entry
+    try:
+        db.add(new_user_entry)
+        db.commit()
+        db.refresh(new_user_entry)
+        response = empty_success_response
+        response['data'] = new_user_entry
+    except IntegrityError as e:
+        response = not_found_response
+        response['error'] = e
+        return response
+    return response  # pragma: nocover
+
+
+def delete_entry(db: Session, entry_id: UUID4) -> Dict:
+    queried_entry = db.query(DailyReturn).filter(DailyReturn.portfolio_id == entry_id).first()
+    if queried_entry:
+        try:
+            db.delete(queried_entry)
+            db.commit()
+            response = empty_success_response
+            response['status_code'] = 200
+            response['data'] = {
+                'message': 'Entry deleted',
+                'delete_id': entry_id
+            }
+            return response
+        except IntegrityError as e:
+            response = not_found_response
+            response['error'] = e
+            return response
+    else:
+        response = not_found_response
+        response['data'] = {
+            'message': 'ID NOT FOUND',
+            'searched_id': entry_id
+        }
+        return response
+# def update_price_entry(db: Session, amount: float, user_portfolio_id: str) -> Dict:
