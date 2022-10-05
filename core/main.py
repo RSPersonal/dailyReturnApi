@@ -1,7 +1,6 @@
 import os
-import uuid
-
 import crud
+
 from schemas import DailyReturnEntry
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -42,6 +41,7 @@ def get_db():
         db.close()
 
 
+@app.get("/")
 def read_main():
     return {"message": "success",
             "status": 200,
@@ -51,7 +51,7 @@ def read_main():
 
 
 @app.get("/api/v1/daily-return/{entry_id}")
-async def daily_return_item(
+async def get_daily_return_item(
         entry_id: UUID4,
         db: Session = Depends(get_db)):
     """

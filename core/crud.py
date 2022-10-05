@@ -65,7 +65,7 @@ def delete_entry(db: Session, entry_id: UUID4) -> Dict:
             response = empty_success_response
             response['status_code'] = 200
             response['data'] = {
-                'message': 'Entry deleted',
+                'detail': 'Entry deleted',
                 'delete_id': entry_id
             }
             return response
@@ -75,8 +75,9 @@ def delete_entry(db: Session, entry_id: UUID4) -> Dict:
             return response
     else:
         response = not_found_response
+        response['status_code'] = 404
         response['data'] = {
-            'message': 'ID NOT FOUND',
+            'detail': 'ID not found',
             'searched_id': entry_id
         }
         return response
