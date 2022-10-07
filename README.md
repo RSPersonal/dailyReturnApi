@@ -13,10 +13,12 @@ The idea for this project came from 2 issues.
 1. I wanted to learn Docker 
 2. My main portfolio website needed a small service to 
 
-Issue 1. Learn Docker
+##### Issue 1. Learn Docker
+
 I can't count how many times I read about Docker or the amount of example applications used with Docker. After reading about how much times it saves and confient it must be, it was time to learn Docker. 
 
-Issue 2. Main issue: Get the daily return from my stock portfolio used in my Stocktracker app
+##### Issue 2. Main issue: Get the daily return from my stock portfolio used in my Stocktracker app
+
 I was looking for a nice project to learn building a RESTful api and docker. After refactoring the interface of my stocktracker app I added a new KPI named 'Daily return'. This figure shows whenever the user opens his portfolio detail page, the daily return in regard to yesterday. 
 
 ####  Technology stack
@@ -35,9 +37,5 @@ I was looking for a nice project to learn building a RESTful api and docker. Aft
 My goal was to build a RESTful Api which implemented the basic CRUD (CREATE, READ, UPDATE, DELETE) operations following the restfull architectural style. 
 ####  Challenges and future improvements
 
-####
-
-####
-
-
+### How to run
 `gunicorn -k uvicorn.workers.UvicornWorker main:app -b :8000`
