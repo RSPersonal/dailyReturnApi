@@ -9,6 +9,7 @@ from database import SessionLocal, database
 from sqlalchemy.orm import Session
 from pydantic import UUID4
 from responses import empty_success_response
+from fastapi.responses import JSONResponse
 
 API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
 
@@ -70,13 +71,22 @@ async def create_new_entry(portfolio_id: UUID4,
 
 
 @app.delete("/api/v1/daily-return/delete/{portfolio_id}")
-async def delete_existing_entry(portfolio_id: UUID4,
+async def delete_existing_entry(entry_id: UUID4,
                                 db: Session = Depends(get_db)):
     active_deleting = os.getenv("DELETE_ACTIVE", config("DELETE_ACTIVE"))
     if active_deleting:
-        response = crud.delete_entry(db, portfolio_id)
+        response = crud.delete_entry(db, entry_id)
     else:
         response = empty_success_response
         response['status_code'] = 200
         response['data'] = 'Deleting of records is deactivated'
+    return response
+
+
+@app.patch("/api/v1/daily-return/update/{entry_id}/{update_price}")
+async def update_daily_return_entry(entry_id: UUID4,
+                                    update_price: float,
+                                    db: Session = Depends(get_db),
+                                    ):
+    response = crud.update_price_entry(entry_id, db, update_price)
     return response
