@@ -5,7 +5,11 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from decouple import config
 
-DATABASE_URL = os.getenv("DATABASE_URL", config("DATABASE_URL"))
+DEBUG = os.getenv("DEBUG", config("DEBUG"))
+
+DATABASE_URL = os.getenv("DATABASE_URL_PROD", config("DATABASE_URL_PROD"))
+if DEBUG:
+    DATABASE_URL = os.getenv("DATABASE_URL_LOCAL", config("DATABASE_URL_LOCAL"))
 
 database = databases.Database(DATABASE_URL)
 

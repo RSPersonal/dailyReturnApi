@@ -53,7 +53,7 @@ def create_latest_price_entry(db: Session, portfolio_id: UUID4, amount: float):
         return response
     except IntegrityError as e:
         response = SERVER_ERROR_RESPONSE
-        response['error'] = e
+        response['error'] = jsonable_encoder(e)
     return response  # pragma: nocover
 
 

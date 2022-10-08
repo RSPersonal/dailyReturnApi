@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from pydantic import UUID4
 from responses import EMPTY_SUCCESS_RESPONSE
 from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 
 API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
 
@@ -44,11 +45,14 @@ def get_db():
 
 @app.get("/")
 def read_main():
-    return {"message": "success",
-            "status": 200,
-            "Title": "Daily Return API",
-            "Author": "Raphael Sparenberg",
-            "Version": API_VERSION}
+    return JSONResponse(content=
+                        {"message": "success",
+                         "status": 200,
+                         "Title": "Daily Return API",
+                         "Author": "Raphael Sparenberg",
+                         "Version": API_VERSION
+                         }
+                        )
 
 
 @app.get("/api/v1/daily-return/{entry_id}")
@@ -67,7 +71,7 @@ async def create_new_entry(portfolio_id: UUID4,
                            amount: float,
                            db: Session = Depends(get_db)):
     response = crud.create_latest_price_entry(db, portfolio_id, amount)
-    return response
+    return JSONResponse(content=response)
 
 
 @app.delete("/api/v1/daily-return/delete/{portfolio_id}")
