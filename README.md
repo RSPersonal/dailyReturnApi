@@ -11,7 +11,7 @@ API Service for sending the daily return amount of a stock portfolio.
 #### Problem i wanted to solve
 The idea for this project came from 2 issues. 
 1. I wanted to learn Docker 
-2. My main portfolio website needed a small service to 
+2. My main portfolio website needed a small service to get the daily return for a specific stock portfolio
 
 ##### Issue 1. Learn Docker
 
