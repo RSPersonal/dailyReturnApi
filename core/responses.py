@@ -1,16 +1,21 @@
 # Standard responses
 
-empty_success_response = {"message": "success",
+EMPTY_SUCCESS_RESPONSE = {"message": "success",
                           "status_code": 200,
                           "data": {}
                           }
 
-forbidden_response = {"message": "success",
-                      "status_code": 403,
-                      "data": {}
-                      }
+ACCESS_FORBIDDEN_RESPONSE = {"message": "success",
+                             "status_code": 403,
+                             "data": {}
+                             }
 
-not_found_response = {"message": "success",
+NOT_FOUND_RESPONSE = {"message": "success",
                       "status_code": 404,
                       "data": {}
                       }
+
+SERVER_ERROR_RESPONSE = {"message": "success",
+                         "status_code": 500,
+                         "data": {}
+                         }

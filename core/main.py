@@ -8,7 +8,7 @@ from decouple import config
 from database import SessionLocal, database
 from sqlalchemy.orm import Session
 from pydantic import UUID4
-from responses import empty_success_response
+from responses import EMPTY_SUCCESS_RESPONSE
 from fastapi.responses import JSONResponse
 
 API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
@@ -77,7 +77,7 @@ async def delete_existing_entry(entry_id: UUID4,
     if active_deleting:
         response = crud.delete_entry(db, entry_id)
     else:
-        response = empty_success_response
+        response = EMPTY_SUCCESS_RESPONSE
         response['status_code'] = 200
         response['data'] = 'Deleting of records is deactivated'
     return response
