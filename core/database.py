@@ -8,7 +8,7 @@ from decouple import config
 DEBUG = os.getenv("DEBUG", config("DEBUG"))
 
 DATABASE_URL = os.getenv("DATABASE_URL_PROD", config("DATABASE_URL_PROD"))
-if DEBUG == True:
+if DEBUG == 'True':
     DATABASE_URL = os.getenv("DATABASE_URL_LOCAL", config("DATABASE_URL_LOCAL"))
 
 database = databases.Database(DATABASE_URL)
