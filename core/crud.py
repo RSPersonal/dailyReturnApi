@@ -25,10 +25,12 @@ def get_latest_price(db: Session, portfolio_id: UUID4) -> str:
         return response
     else:
         response = EMPTY_SUCCESS_RESPONSE
+        fetched_price = fetched_entry.last_price
         response['data'] = {
-            fetched_entry
+            'last_price': fetched_price
         }
-    return json.dumps(response)  # pragma: nocover
+        response['requested_id'] = portfolio_id
+    return response  # pragma: nocover
 
 
 def create_latest_price_entry(db: Session, portfolio_id: UUID4, amount: float):
