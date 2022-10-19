@@ -13,10 +13,10 @@ from core.crud import get_latest_price
 
 from uuid import uuid4
 from datetime import datetime
+
 # Documentatino https://stackoverflow.com/questions/67255653/how-to-set-up-and-tear-down-a-database-between-tests-in-fastapi
 
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:root@localhost:5432/test-fastapi"
-
 
 DATABASE_URL = SQLALCHEMY_DATABASE_URL
 engine = create_engine(
@@ -64,4 +64,3 @@ def test_post_entry(client):
 
     item = client.get('api/v1/daily-return/00dc9d7c-fcef-4653-a3e8-2931ba5665b4')
     assert item.status_code == 200
-    print(item)
