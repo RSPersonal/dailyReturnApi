@@ -1,6 +1,8 @@
 import json
 import uuid
 
+from fastapi.encoders import jsonable_encoder
+
 from responses import EMPTY_SUCCESS_RESPONSE, NOT_FOUND_RESPONSE, SERVER_ERROR_RESPONSE
 from models import DailyReturn
 from sqlalchemy.orm import Session
@@ -8,7 +10,7 @@ from pydantic import UUID4
 from typing import Dict
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
-from fastapi.encoders import jsonable_encoder
+from uuid import UUID
 
 
 def get_latest_price(db: Session, portfolio_id: UUID4) -> str:
@@ -33,7 +35,7 @@ def get_latest_price(db: Session, portfolio_id: UUID4) -> str:
     return response  # pragma: nocover
 
 
-def create_latest_price_entry(db: Session, portfolio_id: UUID4, amount: float):
+def create_latest_price_entry(db: Session, portfolio_id: UUID, amount: float):
     """
     :param db: Session
     :param portfolio_id: UUID4

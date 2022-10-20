@@ -11,6 +11,7 @@ from pydantic import UUID4
 from responses import EMPTY_SUCCESS_RESPONSE
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
+from uuid import UUID
 
 API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
 
@@ -67,7 +68,7 @@ async def get_daily_return_item(
 
 
 @app.post("/api/v1/daily-return/new/{portfolio_id}/{amount}", response_model=DailyReturnEntry)
-async def create_new_entry(portfolio_id: UUID4,
+async def create_new_entry(portfolio_id: UUID,
                            amount: float,
                            db: Session = Depends(get_db)):
     response = crud.create_latest_price_entry(db, portfolio_id, amount)
