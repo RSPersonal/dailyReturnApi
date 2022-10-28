@@ -3,7 +3,7 @@ https://daily.rs-portfolio-services.com/
 
 ## Project description
 #### Architecture
-![architecture drawio](https://user-images.githubusercontent.com/74533741/198512620-b730487c-579c-49e0-8213-32ddf894e07b.png)
+![architecture drawio (1)](https://user-images.githubusercontent.com/74533741/198513471-c8e9e2aa-e647-46eb-933d-f5658e6681c0.png)
 
 
 ####  Main purpose
