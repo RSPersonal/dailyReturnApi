@@ -2,6 +2,9 @@
 https://daily.rs-portfolio-services.com/
 
 ## Project description
+#### Architecture
+![architecture drawio](https://user-images.githubusercontent.com/74533741/198512620-b730487c-579c-49e0-8213-32ddf894e07b.png)
+
 
 ####  Main purpose
 API Service for sending the daily return amount of a stock portfolio.
