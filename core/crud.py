@@ -52,6 +52,7 @@ def create_latest_price_entry(db: Session, portfolio_id: UUID, amount: float):
         db.add(new_user_entry)
         db.commit()
         db.refresh(new_user_entry)
+        new_user_entry['id'] = str(new_user_entry[id])
         response = EMPTY_SUCCESS_RESPONSE
         response['data'] = jsonable_encoder(new_user_entry)
         return response
