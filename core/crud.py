@@ -9,6 +9,7 @@ from typing import Dict
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy import desc
 
 
 def get_latest_price(db: Session, portfolio_id: UUID4) -> Dict:
@@ -17,7 +18,11 @@ def get_latest_price(db: Session, portfolio_id: UUID4) -> Dict:
     :param portfolio_id: UUID4
     :return: Dictionary with fetched daily return or no entry found
     """
-    fetched_entry = db.query(DailyReturn).filter(DailyReturn.portfolio_id == portfolio_id).first()
+    fetched_entry = db.query(DailyReturn)\
+        .filter(DailyReturn.portfolio_id == portfolio_id)\
+        .order_by(desc('added_on'))\
+        .first()
+
     if fetched_entry is None:
         response = NOT_FOUND_RESPONSE
         response['error'] = 'No entry found with given ID'
