@@ -5,17 +5,17 @@ EMPTY_SUCCESS_RESPONSE = {"message": "success",
                           "data": {}
                           }
 
-ACCESS_FORBIDDEN_RESPONSE = {"message": "success",
+ACCESS_FORBIDDEN_RESPONSE = {"message": "failed",
                              "status_code": 403,
                              "data": {}
                              }
 
-NOT_FOUND_RESPONSE = {"message": "success",
+NOT_FOUND_RESPONSE = {"message": "failed",
                       "status_code": 404,
                       "data": {}
                       }
 
-SERVER_ERROR_RESPONSE = {"message": "success",
+SERVER_ERROR_RESPONSE = {"message": "failed",
                          "status_code": 500,
                          "data": {}
                          }

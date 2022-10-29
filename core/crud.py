@@ -1,18 +1,21 @@
+import json
 import uuid
+
+from fastapi.encoders import jsonable_encoder
 
 from responses import EMPTY_SUCCESS_RESPONSE, NOT_FOUND_RESPONSE, SERVER_ERROR_RESPONSE
 from models import DailyReturn
 from sqlalchemy.orm import Session
-from schemas import DailyReturnEntry
 from pydantic import UUID4
 from typing import Dict
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import desc
+from uuid import UUID
 
 
-def get_latest_price(db: Session, portfolio_id: UUID4) -> Dict:
+def get_latest_price(db: Session, portfolio_id: UUID4) -> str:
     """
     :param db: Session
     :param portfolio_id: UUID4
@@ -30,13 +33,15 @@ def get_latest_price(db: Session, portfolio_id: UUID4) -> Dict:
         return response
     else:
         response = EMPTY_SUCCESS_RESPONSE
+        fetched_price = fetched_entry.last_price
         response['data'] = {
-            fetched_entry
+            'last_price': fetched_price
         }
+        response['requested_id'] = portfolio_id
     return response  # pragma: nocover
 
 
-def create_latest_price_entry(db: Session, portfolio_id: UUID4, amount: float):
+def create_latest_price_entry(db: Session, portfolio_id: UUID, amount: float):
     """
     :param db: Session
     :param portfolio_id: UUID4
@@ -53,6 +58,7 @@ def create_latest_price_entry(db: Session, portfolio_id: UUID4, amount: float):
         db.add(new_user_entry)
         db.commit()
         db.refresh(new_user_entry)
+        new_user_entry.id = str(new_user_entry.id)
         response = EMPTY_SUCCESS_RESPONSE
         response['data'] = jsonable_encoder(new_user_entry)
         return response
