@@ -10,7 +10,6 @@ from sqlalchemy.orm import Session
 from pydantic import UUID4
 from responses import EMPTY_SUCCESS_RESPONSE
 from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
 from uuid import UUID
 
 API_VERSION = os.getenv("API_VERSION", config("API_VERSION"))
@@ -64,7 +63,7 @@ async def get_daily_return_item(
     parameters:
     """
     response = crud.get_latest_price(db, entry_id)
-    return response
+    return JSONResponse(content=response)
 
 
 @app.post("/api/v1/daily-return/new/{portfolio_id}/{amount}", response_model=DailyReturnEntry)

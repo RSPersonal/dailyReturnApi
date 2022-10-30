@@ -1,5 +1,4 @@
 # Standard responses
-
 EMPTY_SUCCESS_RESPONSE = {"message": "success",
                           "status_code": 200,
                           "data": {}

@@ -29,7 +29,7 @@ def get_latest_price(db: Session, portfolio_id: UUID4) -> str:
     if fetched_entry is None:
         response = NOT_FOUND_RESPONSE
         response['error'] = 'No entry found with given ID'
-        response['requested_id'] = portfolio_id
+        response['requested_id'] = str(portfolio_id)
         return response
     else:
         response = EMPTY_SUCCESS_RESPONSE
@@ -37,7 +37,7 @@ def get_latest_price(db: Session, portfolio_id: UUID4) -> str:
         response['data'] = {
             'last_price': fetched_price
         }
-        response['requested_id'] = portfolio_id
+        response['requested_id'] = str(portfolio_id)
     return response  # pragma: nocover
 
 
