@@ -21,9 +21,9 @@ def get_latest_price(db: Session, portfolio_id: UUID4) -> str:
     :param portfolio_id: UUID4
     :return: Dictionary with fetched daily return or no entry found
     """
-    fetched_entry = db.query(DailyReturn)\
-        .filter(DailyReturn.portfolio_id == portfolio_id)\
-        .order_by(desc('added_on'))\
+    fetched_entry = db.query(DailyReturn) \
+        .filter(DailyReturn.portfolio_id == portfolio_id) \
+        .order_by(desc('added_on')) \
         .first()
 
     if fetched_entry is None:
@@ -69,7 +69,7 @@ def create_latest_price_entry(db: Session, portfolio_id: UUID, amount: float):
 
 
 def delete_entry(db: Session, entry_id: UUID4) -> Dict:
-    queried_entry = db.query(DailyReturn).filter(DailyReturn.id == entry_id).first()
+    queried_entry = db.query(DailyReturn).get(entry_id)
     if queried_entry:
         try:
             db.delete(queried_entry)
@@ -78,7 +78,7 @@ def delete_entry(db: Session, entry_id: UUID4) -> Dict:
             response['status_code'] = 200
             response['data'] = {
                 'detail': 'Entry deleted',
-                'delete_id': entry_id
+                'delete_id': str(entry_id)
             }
             return response
         except IntegrityError as e:
@@ -90,13 +90,13 @@ def delete_entry(db: Session, entry_id: UUID4) -> Dict:
         response['status_code'] = 404
         response['data'] = {
             'detail': 'ID not found',
-            'searched_id': entry_id
+            'searched_id': str(entry_id)
         }
         return response
 
 
 def update_price_entry(entry_id: UUID4, db: Session, amount: float) -> Dict:
-    queried_entry = db.query(DailyReturn).filter(DailyReturn.portfolio_id == entry_id).first()
+    queried_entry = db.query(DailyReturn).get(entry_id)
     response = NOT_FOUND_RESPONSE
     if queried_entry is None:
         NOT_FOUND_RESPONSE['data'] = {

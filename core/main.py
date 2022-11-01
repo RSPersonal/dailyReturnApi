@@ -74,7 +74,7 @@ async def create_new_entry(portfolio_id: UUID,
     return JSONResponse(content=response)
 
 
-@app.delete("/api/v1/daily-return/delete/{portfolio_id}")
+@app.delete("/api/v1/daily-return/delete/{entry_id}")
 async def delete_existing_entry(entry_id: UUID4,
                                 db: Session = Depends(get_db)):
     active_deleting = os.getenv("DELETE_ACTIVE", config("DELETE_ACTIVE"))

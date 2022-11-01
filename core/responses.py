@@ -14,7 +14,7 @@ NOT_FOUND_RESPONSE = {"message": "failed",
                       "data": {}
                       }
 
-SERVER_ERROR_RESPONSE = {"message": "failed",
+SERVER_ERROR_RESPONSE = {"message": "for ",
                          "status_code": 500,
                          "data": {}
                          }
